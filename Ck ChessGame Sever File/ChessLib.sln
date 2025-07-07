@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessClient", "ChessClient\ChessClient.csproj", "{B717869F-16CF-D7B8-94D7-7F0FC9178C43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessMain", "ChessMain\ChessMain.csproj", "{B61D591B-11CE-8D61-C51F-5BCF177202A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessServer", "ChessServer\ChessServer.csproj", "{CBB0E252-26C8-255F-1DB1-7FCB1F315498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessServerProgram", "ChessServerProgram\ChessServerProgram.csproj", "{92BDF6A8-E8BB-A1B0-D2D6-F1951C6C23C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessTest", "ChessTest\ChessTest.csproj", "{686691A3-7690-4393-AE88-6C0F66C7BF1C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B717869F-16CF-D7B8-94D7-7F0FC9178C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B717869F-16CF-D7B8-94D7-7F0FC9178C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B717869F-16CF-D7B8-94D7-7F0FC9178C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B717869F-16CF-D7B8-94D7-7F0FC9178C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61D591B-11CE-8D61-C51F-5BCF177202A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61D591B-11CE-8D61-C51F-5BCF177202A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61D591B-11CE-8D61-C51F-5BCF177202A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61D591B-11CE-8D61-C51F-5BCF177202A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBB0E252-26C8-255F-1DB1-7FCB1F315498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBB0E252-26C8-255F-1DB1-7FCB1F315498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBB0E252-26C8-255F-1DB1-7FCB1F315498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBB0E252-26C8-255F-1DB1-7FCB1F315498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92BDF6A8-E8BB-A1B0-D2D6-F1951C6C23C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92BDF6A8-E8BB-A1B0-D2D6-F1951C6C23C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92BDF6A8-E8BB-A1B0-D2D6-F1951C6C23C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92BDF6A8-E8BB-A1B0-D2D6-F1951C6C23C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{686691A3-7690-4393-AE88-6C0F66C7BF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686691A3-7690-4393-AE88-6C0F66C7BF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686691A3-7690-4393-AE88-6C0F66C7BF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686691A3-7690-4393-AE88-6C0F66C7BF1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {685110D2-79C5-47FE-8D30-F30DB577C6E1}
+	EndGlobalSection
+EndGlobal
