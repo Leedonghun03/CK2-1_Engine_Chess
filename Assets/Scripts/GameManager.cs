@@ -55,7 +55,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
         var id = ChessClientManager.Client.Account.UniqueId;
 
         int idx = 1;
@@ -74,7 +73,6 @@ public class GameManager : MonoBehaviour
             pmc.InitWhois(i.Id);
             pmc.transform.position = new Vector3(++idx * chessBoard.cellWorldSize, 0, 4 * chessBoard.cellWorldSize);
         }
-        
         /*
         // 씬에 배치된 모든 Pieces를 찾아서 보드에 세팅하는 작업
         foreach (var piece in FindObjectsByType<Pieces>(FindObjectsSortMode.None))
@@ -84,7 +82,7 @@ public class GameManager : MonoBehaviour
             // 보드에 등록하면 piece.boardPosition도 자동으로 세팅
             chessBoard.SetPiece(piece, gridPos);
         }
-        
+
         // 각 팀에 공격 가능한 위치 초기화
         // pawn, knight 외에는 pawn이 막고 있어서 공격 불가능
         foreach (var pawn in FindObjectsByType<Pawn>(FindObjectsSortMode.None))
@@ -128,6 +126,10 @@ public class GameManager : MonoBehaviour
                 RoomMemberCount = room.GetMemberCount();
                 #endregion
 
+                chessBoard.enPassantVulnerableX = room.PlayingData.enPassantVulnerable.Item1;
+                chessBoard.enPassantVulnerableY = room.PlayingData.enPassantVulnerable.Item2;
+                chessBoard.hasEnPassantVulnerable = room.PlayingData.hasEnPassantVulnerable;
+
                 //Is Dirty
                 foreach (var piece in FindObjectsByType<Pieces>(FindObjectsSortMode.None))
                 {
@@ -136,14 +138,15 @@ public class GameManager : MonoBehaviour
                     piece.gameObject.SetActive(false);
                 }
 
+                var ht = room.PlayingData.HeldTarget;
+                Vector2Int htvec = new Vector2Int(ht.Item1, ht.Item2);
+
                 //PlayingData의 데이터에 맞게 동기화 작업
                 for (int x = 0; x < 8; ++x)
                 {
                     for (int y = 0; y < 8; ++y)
                     {
                         Vector2Int pos = new Vector2Int(x, y);
-                        //현재 누가 들고있는건 굳이 렌더링해줄 필요는 없음
-                        if (chessBoard.heldPosition == pos) continue;
 
                         var pawn = room.PlayingData.Board[x, y];
                         if (pawn == null) continue;
@@ -161,9 +164,22 @@ public class GameManager : MonoBehaviour
                         }
 
                         chessBoard.SetPiece(piece, pos);
-                        chessBoard.UpdateAttackCoverageAt(piece, true);
+                        //현재 누가 들고있는건 굳이 렌더링해줄 필요는 없음
+
+                        if (htvec == pos)
+                        {
+                            piece.gameObject.SetActive(false);
+                        }
                     }
                 }
+                Debug.Log($"Current Player Held Pos : {htvec}");
+                chessBoard.RebuildAttackMaps();
+                
+                TeamColor movedTeam = room.PlayingData.CurrentTurn == ChessGamePlayingData.Turn.WHITE
+                    ? TeamColor.Black
+                    : TeamColor.White;
+
+                chessBoard.EvaluateCheckmate(movedTeam);
             }
         }
     }

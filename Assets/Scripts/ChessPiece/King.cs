@@ -31,10 +31,35 @@ public class King : Pieces
         new Vector2Int(-2, 0),
     };
 
-    protected override List<Vector2Int> GetAvailableMoves()
+    public override List<Vector2Int> GetAvailableMoves()
     {
-        List<Vector2Int> moves = LeaperMoves(offsets);
+        List<Vector2Int> moves = new();
+        List<Pieces>[,] enemyAttackMap = team == TeamColor.White ? chessBoard.blackAttackMap : chessBoard.whiteAttackMap;
+        
+        foreach (var moveOffset in offsets)
+        {
+            Vector2Int dest = boardPosition + moveOffset;
 
+            if (!chessBoard.IsInside(dest))
+            {
+                continue;
+            }
+            if (enemyAttackMap[dest.x, dest.y].Count > 0)
+            {
+                continue;
+            }
+            
+            Pieces target = chessBoard.GetPiece(dest);
+            if (!target)
+            {
+                moves.Add(dest);
+            }
+            else if (target && target.team != this.team)
+            {
+                moves.Add(dest);
+            }
+        }
+        
         if (!hasMoved)
         {
             foreach (var castlingOffset in castlingOffsets)
@@ -51,7 +76,17 @@ public class King : Pieces
     
     public override List<Vector2Int> GetAttackSquares()
     {
-        return GetAvailableMoves();
+        List<Vector2Int> squares = new();
+        foreach (Vector2Int offset in offsets)
+        {
+            Vector2Int pos = boardPosition + offset;
+            if (chessBoard.IsInside(pos))
+            {
+                squares.Add(pos);
+            }
+        }
+
+        return squares;
     }
     
     protected override void PerformMove(Vector2Int dropGridPosition)
@@ -124,7 +159,6 @@ public class King : Pieces
     private void ExecuteCastle(Vector2Int offset)
     {
         // === 킹 이동 ===
-        Vector2Int oldKingPos = boardPosition;
         Vector2Int newKingPos = this.boardPosition + offset;
         hasMoved = true;
         
@@ -133,7 +167,7 @@ public class King : Pieces
         // === 룩 이동 ===
         int dir = (int)Mathf.Sign(offset.x);
         int rookPosX = dir > 0 ? 7 : 0;
-        int rookPosY = oldKingPos.y;
+        int rookPosY = team == TeamColor.White ? 0 : 7;
         
         Vector2Int oldRookPos = new Vector2Int(rookPosX, rookPosY);
         Vector2Int newRookPos = new Vector2Int(newKingPos.x - dir, rookPosY);

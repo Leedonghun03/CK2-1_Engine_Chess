@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Playables;
 
 public enum TeamColor
 {
@@ -29,12 +30,12 @@ public class Pieces : MonoBehaviour, ILiftAble
     
     public void Awake()
     {
-        if (chessBoard == null)
+        if (!chessBoard)
         {
             chessBoard = GameObject.Find("Chessboard").GetComponent<Board>();
         }
 
-        if (indicatorManager == null)
+        if (!indicatorManager)
         {
             indicatorManager = GameObject.Find("MoveIndicatorManager").GetComponent<MoveIndicatorManager>();
         }
@@ -44,10 +45,11 @@ public class Pieces : MonoBehaviour, ILiftAble
     public void LiftToParent(Transform parent)
     {
         worldPosition = transform.position;
-        transform.position = Vector3.zero;
-        transform.SetParent(parent, false);
+        //transform.position = Vector3.zero;
+        //transform.SetParent(parent, false);
+        GetComponent<MeshRenderer>().enabled = false;
         
-        legalMoves = GetAvailableMoves();
+        legalMoves = chessBoard.TryGetCachedMoves(this);
         indicatorManager.ShowMoveIndicator(chessBoard, legalMoves);
     }
 
@@ -68,6 +70,7 @@ public class Pieces : MonoBehaviour, ILiftAble
     {
         // worldPosition에서 gridPosition으로 변경
         Vector2Int dropGridPosition = chessBoard.WorldToGridPosition(dropWorldPosition);
+        GetComponent<MeshRenderer>().enabled = true;
 
         // 자기 자신 자리에 내려놓을 때
         // 서버에서는 턴을 안넘기는 처리 필요
@@ -88,7 +91,7 @@ public class Pieces : MonoBehaviour, ILiftAble
         return true;
     }
 
-    protected virtual List<Vector2Int> GetAvailableMoves() { return null; }
+    public virtual List<Vector2Int> GetAvailableMoves() { return null; }
     //pawn문 대각선 적 확인 하나 때문에 사용중임
     public virtual List<Vector2Int> GetAttackSquares() { return null; }
 
@@ -161,10 +164,13 @@ public class Pieces : MonoBehaviour, ILiftAble
         Vector2Int oldPiecesPos = boardPosition;
         chessBoard.SetPiece(null, oldPiecesPos);
         chessBoard.SetPiece(this, dropGridPosition);
-        
+
         // 공격 맵 갱신
         chessBoard.UpdateAttackMaps(this, oldPiecesPos, dropGridPosition);
-        
+
+        // 상대 King 체크메이트 확인
+        chessBoard.EvaluateCheckmate(this.team);
+
         // 그리드 좌표에서 월드 좌표로 스냅
         transform.SetParent(chessBoard.transform, false);
         transform.position = chessBoard.GridToWorldPosition(dropGridPosition);

@@ -1,4 +1,5 @@
 using System.Linq;
+using EndoAshu.Chess.Client.InGame;
 using EndoAshu.Chess.Client.State;
 using EndoAshu.Chess.InGame;
 using Runetide.Util;
@@ -109,9 +110,19 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-
+            
             if (heldLiftAble is Pieces pieces)
             {
+                Board board = GameObject.Find("Chessboard").GetComponent<Board>();
+
+                if (board.playState == Board.BoardPlayState.CheckMate ||
+                    board.playState == Board.BoardPlayState.Stalemate)
+                    return;
+                
+                // 집을 수 있는 기물셋이 비어있다면 && 포함이 안되어 있다면 return
+                if (board.playState == Board.BoardPlayState.Check && !board.canGrabPieceSet.Contains(pieces))
+                    return;
+                
                 if (ChessClientManager.UnsafeClient?.State is GameInState gi)
                 {
                     gi.PawnHeld(pieces.boardPosition.x, pieces.boardPosition.y).Then((e) =>
@@ -119,7 +130,6 @@ public class PlayerController : MonoBehaviour
                         //Debug.Log($"Held {e.Commander}, {e.TargetX}, {e.TargetY}");
                         if (e.TargetX >= 0 && e.TargetX < 8 && e.TargetY >= 0 && e.TargetY < 8)
                         {
-                            Board board = GameObject.Find("Chessboard").GetComponent<Board>();
                             var piece = board.GetPiece(new Vector2Int(e.TargetX, e.TargetY));
                             piece.LiftToParent(holdPoint);
                         }
@@ -159,8 +169,6 @@ public class PlayerController : MonoBehaviour
                         var piece = board.GetPiece(new Vector2Int(e.TargetX, e.TargetY));
                         piece.boardPosition = new Vector2Int(x, y);
                         piece.TryPlaceOnBoard(dropWorldPos);
-
-                        ChessClientManager.UnsafeClient?.CurrentRoom.PlayingData.MarkDirty();
                     }
                 }).Catch(e =>
                 {
